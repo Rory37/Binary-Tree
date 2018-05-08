@@ -9,6 +9,7 @@ void add(node*);
 node* create(int*, int);
 
 int main() {
+  cout << "Welcome to Binary tree creater" << endl;
   //input code adapted from heap
   char c [80];
   bool b = true;
@@ -72,11 +73,24 @@ int main() {
 
 void add (node* root) {
 
+  
 }
 
 node* create(int* treear, int length){
   node* root = new node(treear[0]);
   node* current = root;
-  int i = 1
+  int i = 0;
+  while (i < length) {
+    if (i + 1 <= length) {
+      node* newn = new node(treear[i+1]); 
+      current -> setLeft(newn);
+      i++;
+    }
+    if (i + 1 <= length) {
+      node* newn = new node(treear[i+1]);
+      current -> setLeft(newn);
+      i++;
+    }
+  }
     
 }
