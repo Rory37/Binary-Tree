@@ -7,6 +7,8 @@ using namespace std;
 
 void add(node*);
 node* create(int*, int);
+void reccreate(node*, int*, int);
+void print(node*, int);
 
 int main() {
   cout << "Welcome to Binary tree creater" << endl;
@@ -68,6 +70,9 @@ int main() {
   }
   
   node* root = create(treear, length); //creates tree of node
+  cout << root -> getData() << endl;
+  cout << 'h' << endl;
+  print(root, 0);
 }
 
 
@@ -78,19 +83,69 @@ void add (node* root) {
 
 node* create(int* treear, int length){
   node* root = new node(treear[0]);
-  node* current = root;
-  int i = 0;
-  while (i < length) {
-    if (i + 1 <= length) {
-      node* newn = new node(treear[i+1]); 
-      current -> setLeft(newn);
-      i++;
+  for (int i = 1; i < length; i++) {
+    reccreate(root, treear, i);
+  }
+  return root;
+}
+
+void reccreate(node* comp, int* treear, int i) {
+  node* newp = new node(treear[i]);
+  if(treear[i] < comp -> getData()) {
+    if (comp -> getLeft() == NULL) {
+      comp -> setLeft(newp);
     }
-    if (i + 1 <= length) {
-      node* newn = new node(treear[i+1]);
-      current -> setLeft(newn);
-      i++;
+    else{
+      if (comp -> getRight() == NULL && treear[i] > comp -> getLeft() -> getData()) {//to keep balanced
+	newp -> setData(comp -> getData());
+	comp -> setData(treear[i]);
+	comp -> setRight(newp);
+      }
+      else if (comp -> getRight() == NULL) {
+	newp -> setData(comp -> getData());
+	comp -> setData(comp -> getLeft() -> getData());
+	comp -> getLeft() -> setData(treear[i]);
+	comp -> setRight(newp);
+      }
+      else {
+	reccreate(comp -> getLeft(), treear, i);
+      }
     }
   }
-    
+  else {
+    if (comp -> getRight() == NULL) {
+      comp -> setRight(newp);
+    }
+    else{
+      if (comp -> getLeft() == NULL && treear[i] < comp -> getRight() -> getData()) {//to keep balanced
+	newp -> setData(comp -> getData());
+	comp -> setData(treear[i]);
+	comp -> setLeft(newp);
+      }
+      else if (comp -> getLeft() == NULL) {
+	newp -> setData(comp -> getData());
+	comp -> setData(comp -> getRight() -> getData());
+	comp -> getRight() -> setData(treear[i]);
+	comp -> setLeft(newp);
+      }
+      else {
+	reccreate(comp -> getRight(), treear, i);
+      }
+    }
+  }
+}
+
+void print(node* parent, int count) {
+  if(parent -> getRight() != NULL) {
+    print(parent -> getRight(), count + 1);
+  }
+  int temp = count;
+  while (count > 0) {
+    cout << "   ";
+    count --;
+  }
+  cout << parent -> getData() << endl;
+  if (parent -> getLeft() != NULL) {
+    print (parent -> getLeft(), temp + 1);
+  }
 }

@@ -9,7 +9,6 @@ node :: node(int newdata) {
 node :: ~node() {
   left = NULL;
   right = NULL;
-  data = NULL;
 }
 
 void node :: setLeft(node* newLeft) {
@@ -26,6 +25,10 @@ node* node :: getLeft() {
 
 node* node :: getRight() {
   return right;
+}
+
+void node :: setData(int newdata) {
+  data = newdata;
 }
 
 int node :: getData() {
