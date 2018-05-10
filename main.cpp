@@ -95,42 +95,17 @@ void reccreate(node* comp, int* treear, int i) {
     if (comp -> getLeft() == NULL) {
       comp -> setLeft(newp);
     }
-    else{
-      if (comp -> getRight() == NULL && treear[i] > comp -> getLeft() -> getData()) {//to keep balanced
-	newp -> setData(comp -> getData());
-	comp -> setData(treear[i]);
-	comp -> setRight(newp);
-      }
-      else if (comp -> getRight() == NULL) {
-	newp -> setData(comp -> getData());
-	comp -> setData(comp -> getLeft() -> getData());
-	comp -> getLeft() -> setData(treear[i]);
-	comp -> setRight(newp);
-      }
-      else {
-	reccreate(comp -> getLeft(), treear, i);
-      }
+    else {
+      reccreate(comp -> getLeft(), treear, i);
     }
+    
   }
   else {
     if (comp -> getRight() == NULL) {
       comp -> setRight(newp);
     }
     else{
-      if (comp -> getLeft() == NULL && treear[i] < comp -> getRight() -> getData()) {//to keep balanced
-	newp -> setData(comp -> getData());
-	comp -> setData(treear[i]);
-	comp -> setLeft(newp);
-      }
-      else if (comp -> getLeft() == NULL) {
-	newp -> setData(comp -> getData());
-	comp -> setData(comp -> getRight() -> getData());
-	comp -> getRight() -> setData(treear[i]);
-	comp -> setLeft(newp);
-      }
-      else {
-	reccreate(comp -> getRight(), treear, i);
-      }
+     reccreate(comp -> getRight(), treear, i);
     }
   }
 }
