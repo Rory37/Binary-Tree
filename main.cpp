@@ -8,6 +8,7 @@ using namespace std;
 void add(node*);
 node* create(int*, int);
 void reccreate(node*, int*, int);
+void insert(node*, node*);
 void print(node*, int);
 
 int main() {
@@ -73,12 +74,56 @@ int main() {
   cout << root -> getData() << endl;
   cout << 'h' << endl;
   print(root, 0);
+  bool s = true;
+  while(s == true) {//repeats till quit is typed
+    cout << "Please choose to either insert, delete, print or quit" << endl;
+    char input [80];
+    cin >> input;
+    if (strcmp(input, "insert") == 0) {
+      add(root);//runs insert
+    }
+    else if (strcmp(input, "quit") == 0) {
+      s = false;//exits loop and program
+    }
+    else if (strcmp(input, "delete") == 0) {
+      //length = deletenode(heap, length);//runs delete
+    }
+    else if (strcmp(input, "print") == 0) {
+      print(root, 0);//prints the max heap
+    }
+  }
 }
 
 
 void add (node* root) {
-
+  cout << "What number do you wish to insert?" << endl;
+  cin.ignore();
+  int insertnum;
+  cin >> insertnum;//takes in val to insert
+  node* newnode = new node(insertnum);
+  insert(root, newnode);
+  print(root, 0);//prints new heap
   
+}
+
+void insert(node* comp, node* toin) {
+  if(toin -> getData() < comp -> getData()) {
+    if (comp -> getLeft() == NULL) {
+      comp -> setLeft(toin);
+    }
+    else {
+      insert(comp -> getLeft(), toin);
+    }
+
+  }
+  else {
+    if (comp -> getRight() == NULL) {
+      comp -> setRight(toin);
+    }
+    else{
+      insert(comp -> getRight(), toin);
+    }
+  }
 }
 
 node* create(int* treear, int length){
