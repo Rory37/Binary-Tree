@@ -2,8 +2,9 @@
 #define guard
 class node {
  public:
-  node(int);
-  ~node();
+  node(int);//constructor
+  ~node();//destructor
+  //all function prototype
   void setLeft(node*);
   void setRight(node*);
   node* getLeft();
@@ -11,9 +12,9 @@ class node {
   void setData(int);
   int getData();
  private:
-  node* left;
-  node* right;
-  int data;
+  node* left;//holds left node
+  node* right;//holds right node
+  int data;//holds data
 };
 
 #endif

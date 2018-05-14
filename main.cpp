@@ -10,6 +10,7 @@ node* create(int*, int);
 void reccreate(node*, int*, int);
 void insert(node*, node*);
 void print(node*, int);
+void deletenode(node*, int);
 
 int main() {
   cout << "Welcome to Binary tree creater" << endl;
@@ -70,10 +71,8 @@ int main() {
     }
   }
   
-  node* root = create(treear, length); //creates tree of node
-  cout << root -> getData() << endl;
-  cout << 'h' << endl;
-  print(root, 0);
+  node* root = create(treear, length); //creates tree of array
+  print(root, 0);//prints the tree
   bool s = true;
   while(s == true) {//repeats till quit is typed
     cout << "Please choose to either insert, delete, print or quit" << endl;
@@ -86,10 +85,15 @@ int main() {
       s = false;//exits loop and program
     }
     else if (strcmp(input, "delete") == 0) {
-      //length = deletenode(heap, length);//runs delete
+	cout << "What number do you wish to delete?" << endl;
+	cin.ignore();
+	int delnum;
+	cin >> delnum;//takes in val to delete
+	deletenode(root, delnum);// deletes the number
+	print(root, 0);//prints tree
     }
     else if (strcmp(input, "print") == 0) {
-      print(root, 0);//prints the max heap
+      print(root, 0);//prints the tree
     }
   }
 }
@@ -100,72 +104,139 @@ void add (node* root) {
   cin.ignore();
   int insertnum;
   cin >> insertnum;//takes in val to insert
-  node* newnode = new node(insertnum);
-  insert(root, newnode);
-  print(root, 0);//prints new heap
+  node* newnode = new node(insertnum);//makes node with data value
+  insert(root, newnode);//runs recursive function
+  print(root, 0);//prints new tree
   
 }
 
-void insert(node* comp, node* toin) {
-  if(toin -> getData() < comp -> getData()) {
-    if (comp -> getLeft() == NULL) {
-      comp -> setLeft(toin);
+void insert(node* comp, node* toin) { //recursive funtion
+  if(toin -> getData() < comp -> getData()) {//if less than data of comp
+    if (comp -> getLeft() == NULL) {//if left doesn't exists
+      comp -> setLeft(toin);//inserts on left
     }
     else {
-      insert(comp -> getLeft(), toin);
+      insert(comp -> getLeft(), toin);//runs with node to the left
     }
 
   }
-  else {
-    if (comp -> getRight() == NULL) {
-      comp -> setRight(toin);
+  else { //if right or equal
+    if (comp -> getRight() == NULL) { //if right doesn't exist
+      comp -> setRight(toin);//inserted to right
     }
     else{
-      insert(comp -> getRight(), toin);
+      insert(comp -> getRight(), toin);//runs with one to the right
     }
   }
 }
 
-node* create(int* treear, int length){
-  node* root = new node(treear[0]);
+node* create(int* treear, int length){ 
+  node* root = new node(treear[0]);//makes root node holding first data val
   for (int i = 1; i < length; i++) {
-    reccreate(root, treear, i);
+    reccreate(root, treear, i);//runs reccreate for every array element
   }
-  return root;
+  return root;//returns root of tree
 }
 
 void reccreate(node* comp, int* treear, int i) {
-  node* newp = new node(treear[i]);
-  if(treear[i] < comp -> getData()) {
-    if (comp -> getLeft() == NULL) {
-      comp -> setLeft(newp);
+  node* newp = new node(treear[i]);//new node for new data
+  if(treear[i] < comp -> getData()) {//if data is less than the preexisting node
+    if (comp -> getLeft() == NULL) {//if no left
+      comp -> setLeft(newp);//adds to left
     }
     else {
-      reccreate(comp -> getLeft(), treear, i);
+      reccreate(comp -> getLeft(), treear, i);//runs with one node to the left
     }
     
   }
-  else {
-    if (comp -> getRight() == NULL) {
-      comp -> setRight(newp);
+  else {//if right
+    if (comp -> getRight() == NULL) { // if right DNE
+      comp -> setRight(newp);//adds to right
     }
     else{
-     reccreate(comp -> getRight(), treear, i);
+      reccreate(comp -> getRight(), treear, i);//runs with one to the right
     }
   }
 }
 
 void print(node* parent, int count) {
-  if(parent -> getRight() != NULL) {
-    print(parent -> getRight(), count + 1);
+  if(parent -> getRight() != NULL) {//if there is right
+    print(parent -> getRight(), count + 1); //runs for one to right
   }
-  int temp = count;
+  int temp = count;//holds count for left side
   while (count > 0) {
-    cout << "   ";
+    cout << "   "; //prints tabs for each level of tree
     count --;
   }
-  cout << parent -> getData() << endl;
-  if (parent -> getLeft() != NULL) {
-    print (parent -> getLeft(), temp + 1);
+  cout << parent -> getData() << endl;//prints the node data
+  if (parent -> getLeft() != NULL) {//if left exists
+    print(parent -> getLeft(), temp + 1);//runs for one to the left
+  }
+}
+
+void deletenode(node* comp, int del) {
+  if(del < comp -> getData()) {//if data is less than node
+    if (comp -> getLeft() != NULL) {//if the node has a left
+      if (comp -> getLeft() -> getData() == del) {//if the next to the left equals the data
+	//if the node to the left has no left node or right node
+	if (comp -> getLeft() -> getLeft() == NULL && comp -> getLeft() -> getRight() == NULL){
+	  delete comp -> getLeft();//deletes one to left with no other shift to tree
+	  comp -> setLeft(NULL);//comp has left as null to avoid null pointer
+	  return;
+	}
+      }
+      deletenode(comp -> getLeft(), del);//Runs delete with one to the left
+    }
+    else{
+      cout << "The number you wish to delete does not exist" << endl;
+      return;
+    }
+  }
+  else if(del > comp -> getData()) {//If data is greater than node
+    if (comp -> getRight() != NULL) {// if there is a right
+      if (comp -> getRight() -> getData() == del) {//if right equals delete
+	//if right has no left or right
+	if (comp -> getRight() -> getLeft() == NULL && comp -> getRight() -> getRight() == NULL){
+	  delete comp -> getRight(); //deletes right
+	  comp -> setRight(NULL);//sets right pointer to null
+	  return;
+	}
+      }
+      deletenode(comp -> getRight(), del);
+    }
+    else{
+      cout << "The number you wish to delete does not exist" << endl;
+      return;
+    }
+  }
+  else { //they are equal
+    //defaults to moving left up
+    if (comp -> getLeft() != NULL) {//If left exist
+      node* temp = comp -> getLeft(); //holds left data
+      comp -> setData(temp -> getData());//sets data to equal value of left
+      comp -> setLeft(temp -> getLeft());//gets left of left
+      if (comp -> getRight() == NULL) { //if comp has no right
+	comp -> setRight(temp -> getRight());//right can equal right of the temp
+      }
+      else {
+	node* curr = temp;
+	while(curr -> getRight() != NULL) {//gets to end of the right side of left
+	  curr = curr -> getRight();
+	}
+	curr -> setRight(comp -> getRight());//sets the last one on right to have the comps right as its right
+	comp -> setRight(temp -> getRight());//sets comp right to be the temp rigt
+      }
+      delete temp;//deletes node
+      return;
+    }
+    else if(comp-> getRight() != NULL){//if right exists
+      node* temp = comp -> getRight();//holds right node
+      comp -> setData(temp -> getData());//sets comp data to be the rights data
+      comp -> setLeft(temp -> getLeft());//sets the comp left to be right's left
+      comp -> setRight(temp -> getRight());//sets the comp right to be right's right
+      //the extra treeshift scenario is unnecessary since comp must have no left to reach here
+      delete temp;//deletes the node
+      return;
+    }
   }
 }
